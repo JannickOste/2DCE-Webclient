@@ -7,6 +7,11 @@ import GameManager from './classes/GameManager';
 import Canvas from './components/Canvas';
 import InputHandler from './classes/io/InputHandler';
 
+(async() => {
+  
+  console.dir(await Spritesheet.parseFromURL("/spritesheet.png"));
+})();
+
 const spritesheet = new Image();
 spritesheet.src = '/spritesheet.png';
 spritesheet.onload = () => {

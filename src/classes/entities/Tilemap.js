@@ -1,4 +1,4 @@
-import { TILESIZE } from "../Globals";
+import { TILESIZE, toCsvArray } from "../Globals";
 import Player from "./Player";
 
 export const Area = (() => {
@@ -9,55 +9,42 @@ export const Area = (() => {
 
 export default class Tilemap 
 {
+    /** Area to load data for */
     static currentArea = Area.TEST;
-    static currentBackground = [];
-    static currentForeground = [];
-    
-    static currentOverlay = [];
 
-    static drawGrid = false;
+    /** Map tiles */
+    static #mapBackground = [];
+    static #mapForeground = [];
+    static #mapObjects = [];
+
+    /** Render options  */
     static offset = {x: 0, y: 0}
-
-    // todo: add tile based shift.
-    static RenderGrid(context)
-    {
-        for(let y = 0; y <  window.innerHeight/TILESIZE; y++)
-          for(let x = 0; x <  window.innerWidth/TILESIZE; x++)
-            context.strokeRect(x*TILESIZE, y*TILESIZE, TILESIZE, TILESIZE)
-    }
 
     static TilePassable(x, y) 
     {
-        console.log(x, y)
-        return (!Tilemap.currentOverlay.some((obj) => obj.x == x && obj.y == y) 
-            && (y >= 0 && y < this.currentBackground.length)
-            && (x >= 0 && x < this.currentBackground[y].length)
-            && ((y >= this.currentForeground.length || x >= this.currentForeground[y].length) || this.currentForeground[y][x] === "-1")
+        return (!Tilemap.#mapObjects.some((obj) => obj.x == x && obj.y == y) 
+            && (y >= 0 && y < this.#mapBackground.length)
+            && (x >= 0 && x < this.#mapBackground[y].length)
+            && ((y >= this.#mapForeground.length || x >= this.#mapForeground[y].length) || this.#mapForeground[y][x] === "-1")
         )
     }
 
     static async Update()
     {
         
-        if(!Tilemap.currentBackground.length)
+        if(!Tilemap.#mapBackground.length || !Tilemap.#mapForeground.length || !Tilemap.#mapObjects.length)
         {
             Tilemap.offset = {x: -((Player.position.x*TILESIZE)), y: -((Player.position.y*TILESIZE))}
-            const mapData = await fetch(`/maps/${Tilemap.currentArea}_bg.csv`);
-            Tilemap.currentBackground = (await mapData.text()).split("\n").map(s => s.split(";"));
+            const backgroundRequest = await fetch(`/maps/${Tilemap.currentArea}_bg.csv`);
+            Tilemap.#mapBackground = toCsvArray(await backgroundRequest.text());
+
+            const foregroundRequest = await fetch(`/maps/${Tilemap.currentArea}_fg.csv`);
+            Tilemap.#mapForeground = toCsvArray(await foregroundRequest.text());
+
+            const objectsRequest = await fetch(`/maps/${Tilemap.currentArea}_objects.json`);
+            Tilemap.#mapObjects = JSON.parse(await objectsRequest.text());
         }
 
-        if(!Tilemap.currentForeground.length)
-        {
-            const mapData = await fetch(`/maps/${Tilemap.currentArea}_fg.csv`);
-            Tilemap.currentForeground = (await mapData.text()).split("\n").map(s => s.split(";"));
-        }
-
-        if(!Tilemap.currentOverlay.length)
-        {
-            const mapData = await fetch(`/maps/${Tilemap.currentArea}_objects.json`);
-
-            Tilemap.currentOverlay = JSON.parse(await mapData.text());
-        }
     }
 
     
@@ -67,20 +54,26 @@ export default class Tilemap
         const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.x);
         const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.y);
 
-        for(let layer of [Tilemap.currentBackground, Tilemap.currentForeground])
+        const areaBuffer = {}
+        for(let y = 0; y < Math.max(Tilemap.#mapBackground.length, Tilemap.#mapForeground.length); y++)
         {
-            if(!layer.length) continue;
-            console.log(layer)
-            for(let [y, set] of Object.entries(layer))
+            for(let x = 0; x < Tilemap.#mapBackground[0].length; x++)
             {
-                for(let [x, tileId] of Object.entries(set))
+                let tiles = [
+                    y < Tilemap.#mapBackground.length && x < Tilemap.#mapBackground[y].length ? Number.parseInt(Tilemap.#mapBackground[y][x]) : -1, // Backround
+                    y < Tilemap.#mapForeground.length && x < Tilemap.#mapForeground[y].length ? Number.parseInt(Tilemap.#mapForeground[y][x]) : -1  // Foreground
+                ]
+                
+                for(let tileId of tiles)
                 {
-                    if(tileId === "-1") continue;
+                    if(tileId == -1) continue;
 
-                    const area = spritesheet.getTileArea(tileId);
-
+                    if(!Object.keys(areaBuffer).includes(tileId))
+                        areaBuffer[tileId] = spritesheet.getTileArea(tileId);
+                    
+                    const area = areaBuffer[tileId];
                     context.drawImage(
-                        spritesheet._targetElement, 
+                        spritesheet.imageElement, 
                         
                         area.x, area.y, TILESIZE, TILESIZE, 
 
@@ -89,11 +82,9 @@ export default class Tilemap
                         TILESIZE, TILESIZE
                     );
                 }
+
             }
-
         }
-
-        if(Tilemap.drawGrid) Tilemap.RenderGrid(context);
     }
 
 
