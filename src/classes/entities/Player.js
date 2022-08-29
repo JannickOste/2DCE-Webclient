@@ -31,7 +31,7 @@ export default class Player
             case Direction.RIGHT: Player.moveDirection = {x: -1, y: 0}; break;
             default: throw new Error("Invalid direction parameter, use the Direction enum for passing in direction values.");
         }
-
+        
         Player.facingDirection = direction;
         if(!Tilemap.TilePassable(Player.position.x+Player.moveDirection.x, Player.position.y+Player.moveDirection.y))
             Player.moveDirection = {x: 0, y: 0};

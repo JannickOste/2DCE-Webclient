@@ -28,7 +28,12 @@ export default class Tilemap
 
     static TilePassable(x, y) 
     {
-        return !Tilemap.currentOverlay.some((obj) => obj.x == x && obj.y == y);
+        console.log(x, y)
+        return (!Tilemap.currentOverlay.some((obj) => obj.x == x && obj.y == y) 
+            && (y >= 0 && y < this.currentBackground.length)
+            && (x >= 0 && x < this.currentBackground[y].length)
+            && ((y >= this.currentForeground.length || x >= this.currentForeground[y].length) || this.currentForeground[y][x] === "-1")
+        )
     }
 
     static async Update()
@@ -44,7 +49,7 @@ export default class Tilemap
         if(!Tilemap.currentForeground.length)
         {
             const mapData = await fetch(`/maps/${Tilemap.currentArea}_fg.csv`);
-            Tilemap.currentBackground = (await mapData.text()).split("\n").map(s => s.split(";"));
+            Tilemap.currentForeground = (await mapData.text()).split("\n").map(s => s.split(";"));
         }
 
         if(!Tilemap.currentOverlay.length)
@@ -59,10 +64,13 @@ export default class Tilemap
     static Render(context, spritesheet)
     {
         // Center on screen, and add current map shift
-        const xOffset = (Math.floor(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.x);
-        const yOffset =  (Math.floor(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.y);
+        const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.x);
+        const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.y);
 
         for(let layer of [Tilemap.currentBackground, Tilemap.currentForeground])
+        {
+            if(!layer.length) continue;
+            console.log(layer)
             for(let [y, set] of Object.entries(layer))
             {
                 for(let [x, tileId] of Object.entries(set))
@@ -83,6 +91,7 @@ export default class Tilemap
                 }
             }
 
+        }
 
         if(Tilemap.drawGrid) Tilemap.RenderGrid(context);
     }
