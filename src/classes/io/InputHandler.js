@@ -23,6 +23,7 @@ export default class InputHandler
           case InputHandler.KeyMapping.DOWN:  Player.Move(Direction.DOWN,  shiftClick);  break;
           case InputHandler.KeyMapping.LEFT:  Player.Move(Direction.LEFT,  shiftClick);  break;
           case InputHandler.KeyMapping.RIGHT: Player.Move(Direction.RIGHT, shiftClick);  break;
+          default: return;
         }
     }
 }

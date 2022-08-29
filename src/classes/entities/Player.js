@@ -2,9 +2,9 @@ import { TILESIZE } from "../Globals";
 import Tilemap from "./Tilemap";
 export const Direction = {
     UP: 0,
-    DOWN: 1,
-    LEFT: 2, 
-    RIGHT: 3
+    RIGHT: 1,
+    DOWN: 2,
+    LEFT: 3
 }
 
 export default class Player 
@@ -15,6 +15,7 @@ export default class Player
     static runMultiplier = 2;
     static position = { x: 5, y: 5 }
     static moveDirection = {x: 0, y: 0};
+    static facingDirection = Direction.DOWN;
     static get Moving() { return Object.values(Player.moveDirection).some(n => n !== 0); }
     
     static Move(direction, run)
@@ -28,8 +29,10 @@ export default class Player
             case Direction.DOWN:  Player.moveDirection = {x: 0, y: -1};  break;
             case Direction.LEFT:  Player.moveDirection = {x: 1, y: 0};  break;
             case Direction.RIGHT: Player.moveDirection = {x: -1, y: 0}; break;
+            default: throw new Error("Invalid direction parameter, use the Direction enum for passing in direction values.");
         }
 
+        Player.facingDirection = direction;
         if(!Tilemap.TilePassable(Player.position.x+Player.moveDirection.x, Player.position.y+Player.moveDirection.y))
             Player.moveDirection = {x: 0, y: 0};
             
@@ -53,11 +56,13 @@ export default class Player
     static Render(context, spritesheet) 
     {
         context.save();
+
         const area = spritesheet.getTileArea(Player.characterID);
-        const degree = 0;
+
+        const degree = [0, 1, 2, 3].map(i => -180+(i*90))[Player.facingDirection];
         const rad = degree * Math.PI / 180;
-        const x = Math.floor(((window.innerWidth/2)/TILESIZE))*TILESIZE;
-        const y =  Math.floor(((window.innerHeight/2)/TILESIZE))*TILESIZE;
+        const x = (Math.ceil(((window.innerWidth/2)/TILESIZE)))*TILESIZE;
+        const y =  (Math.ceil((window.innerHeight/2)/TILESIZE))*TILESIZE; // Todo: fix this, dirty solution
     
         context.translate(x, y);
         context.rotate(rad);

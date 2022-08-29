@@ -1,0 +1,7 @@
+{
+    "name": "renderengine",
+    "integrations": {
+      "capacitor": {}
+    },
+    "type": "react"
+  }

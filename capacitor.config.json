@@ -1,0 +1,8 @@
+{
+    "appId": "io.ionic.2dengine",
+    "appName": "renderengine",
+    "bundledWebRuntime": false,
+    "npmClient": "npm",
+    "webDir": "build",
+    "cordova": {}
+  }

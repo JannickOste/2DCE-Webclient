@@ -1,6 +1,6 @@
 <h1>React2D - A 2D canvas engine in react</h1>
 <i>
-    As my new year of school start, there will be new subjects, react was one of them and i always wanted to look into the canvas component.
+    As my new year of school start, there will be new subjects, react was one of them and i always wanted to look into the canvas component so this is the result ':) 
 </i>
 
 <h2>Update Log:</h2> 

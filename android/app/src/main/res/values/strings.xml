@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">2D Render engine</string>
+    <string name="title_activity_main">2D Render engine</string>
+    <string name="package_name">io.ionic.2dengine</string>
+    <string name="custom_url_scheme">io.ionic.2dengine</string>
+</resources>
