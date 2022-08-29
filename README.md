@@ -1,7 +1,7 @@
 <h1>2DReactCanvasEngine</h1>
-<pre>
+<i>
     As my new year of school start, there will be new subjects, react was one of them and i always wanted to look into the canvas component.
-</pre>
+</i>
 
 <h2>Update Log:</h2> 
 <strong>V0.1:</strong> 
