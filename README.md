@@ -5,13 +5,11 @@
 
 <h2>Update Log:</h2> 
 <pre>
-    <strong>V0.1:</strong> 
-    <ul>
-        <li>Main canvas rendering components created and changed to frame based updates.</li>
-        <lI>InputHandler base added</lI>
-        <li>Spritesheet class added for more generalized sprite handeling</li>
-        <li>Player and tilemap entities added.</li>
-        <li>CSV loading added for background/overlay of tilemap</li>
-        <li>JSON loading added for interactable objects of tilemap</li>
-    </ul>
+    <strong>V0.1a:</strong> 
+    - Main canvas rendering components created and changed to frame based updates.
+    - InputHandler base added
+    - Spritesheet class added for more generalized sprite handeling
+    - Player and tilemap entities added.
+    - CSV loading added for background/overlay of tilemap
+    - JSON loading added for interactable objects of tilemap
 </pre>
