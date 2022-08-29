@@ -63,7 +63,7 @@ export default class Tilemap
         const yOffset =  (Math.floor(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.y);
 
         for(let layer of [Tilemap.currentBackground, Tilemap.currentForeground])
-            for(let [y, set] of Object.entries(Tilemap.currentBackground))
+            for(let [y, set] of Object.entries(layer))
             {
                 for(let [x, tileId] of Object.entries(set))
                 {
@@ -83,18 +83,6 @@ export default class Tilemap
                 }
             }
 
-        for(let obj of Tilemap.currentOverlay)
-        {
-            const area = spritesheet.getTileArea(obj.id);
-            context.drawImage(
-                spritesheet._targetElement,
-                area.x, area.y, TILESIZE, TILESIZE, 
-                xOffset+(obj.x*TILESIZE), 
-                yOffset+(obj.y*TILESIZE), 
-                TILESIZE, TILESIZE
-            )
-        }
-    
 
         if(Tilemap.drawGrid) Tilemap.RenderGrid(context);
     }
