@@ -1,14 +1,13 @@
-import { TILESIZE } from "../../Globals";
+import { TILESIZE } from "../Globals";
 
 export default class Spritesheet 
 {
 
     _targetElement;
 
-    constructor(spritesheet, {tilesize = TILESIZE} = {})
+    constructor(spritesheet)
     {
         
-        this._tileSize = tilesize;
         this._targetElement = spritesheet;
     }
 

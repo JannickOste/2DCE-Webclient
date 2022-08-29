@@ -1,17 +1,7 @@
 import Player, { Direction } from "../entities/Player";
-import EventEmitter from "events";
 
-export default class InputHandler extends EventEmitter
+export default class InputHandler
 {
-    constructor()
-    {
-        super();
-        this.addListener("OnUpPress",     this.OnUpPress);
-        this.addListener("OnDownPress",   this.OnDownPress);
-        this.addListener("OnLeftPress",   this.OnLeftPress);
-        this.addListener("OnRightPress",  this.OnRightPress);
-    }
-
     static KeyMapping = (() =>{
         return { 
             UP: "z",
@@ -23,21 +13,16 @@ export default class InputHandler extends EventEmitter
     
     static HandleKeyPress = (ev) => 
     {
-        console.log(ev);
         if(Player.Moving) return;
+
+        const shiftClick = new RegExp(/^[A-Z]$/).test(ev.key);
         /** Key event handlers */
-        switch(ev.key)
+        switch(ev.key.toLowerCase())
         {
-          case InputHandler.KeyMapping.UP: Player.Move(Direction.UP); break;
-          case InputHandler.KeyMapping.DOWN: Player.Move(Direction.DOWN); break;
-          case InputHandler.KeyMapping.LEFT: Player.Move(Direction.LEFT); break;
-          case InputHandler.KeyMapping.RIGHT: Player.Move(Direction.RIGHT); break;
+          case InputHandler.KeyMapping.UP:    Player.Move(Direction.UP,    shiftClick);  break;
+          case InputHandler.KeyMapping.DOWN:  Player.Move(Direction.DOWN,  shiftClick);  break;
+          case InputHandler.KeyMapping.LEFT:  Player.Move(Direction.LEFT,  shiftClick);  break;
+          case InputHandler.KeyMapping.RIGHT: Player.Move(Direction.RIGHT, shiftClick);  break;
         }
     }
-
-    /** Key event handlers */
-    OnUpPress = () => Player.Move(Direction.UP);
-    OnDownPress = () => Player.Move(Direction.DOWN);
-    OnLeftPress = () => Player.Move(Direction.LEFT);
-    OnRightPress = () => Player.Move(Direction.RIGHT);
 }
