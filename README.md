@@ -6,7 +6,6 @@
     </i>
 
     <h2>Update Log:</h2> 
-    <pre>
         <strong>V0.1:</strong> 
         <ul>
             <li>Main canvas rendering components created and changed to frame based updates.</li>
@@ -16,5 +15,4 @@
             <li>CSV loading added for background/overlay of tilemap</li>
             <li>JSON loading added for interactable objects of tilemap</li>
         </ul>
-    </pre>
 </section>
