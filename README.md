@@ -5,6 +5,12 @@
 
 <h2>Update Log:</h2> 
 <pre>
+    <strong>V0.1.1a:</strong> 
+    - Tilemap render loop optimized.
+    - Tile accessibility check expanded. 
+    - text -> csv parsing seperated to function.
+    - spritesheet static fetch function added to remove the need to load/parse image yourself.
+
     <strong>V0.1a:</strong> 
     - Main canvas rendering components created and changed to frame based updates.
     - InputHandler base added
