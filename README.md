@@ -7,6 +7,15 @@
 - Spritesheet: <a href="https://pipoya.itch.io/pipoya-rpg-tileset-32x32">pipoya-rpg-tileset-32x32</a>
 
 <h3>Update Log:</h3> 
+<strong>V0.1.3a:</strong> 
+<pre>
+    - GUI system base added
+    - GUIDrawer added for context drawing support
+    - UIBox component added added to GUI
+    - UITextbox component added  added to GUI
+    - HorzontalMenu components added to GUI 
+</pre>
+
 <strong>V0.1.2a:</strong> 
 <pre>
     - Action handler base added (needs optimization & abstractation, no interface implementation in node, gotta look into this)

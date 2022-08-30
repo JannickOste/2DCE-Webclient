@@ -24,7 +24,6 @@ const Canvas = props => {
       window.cancelAnimationFrame(animationFrameId);
     }
   }, [renderer])
-  
   return (<canvas ref={canvasRef}/>);
 }
 
