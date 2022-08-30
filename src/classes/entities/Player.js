@@ -14,16 +14,16 @@ export default class Player
     static #running = false;
     static #runMultiplier = 2;
     static #moveDirection = {x: 0, y: 0};
+    static #facingDirection = Direction.DOWN;
     
     static position = { x: 5, y: 5 }
-    static facingDirection = Direction.DOWN;
     
     static get Moving() { return Object.values(Player.#moveDirection).some(n => n !== 0); }
     
     static Move(direction, run)
     {
         if(this.Moving) return;
-        Player.facingDirection = direction;
+        Player.#facingDirection = direction;
         this.#running = run;
 
         switch(direction)
@@ -66,10 +66,10 @@ export default class Player
 
         const area = spritesheet.getTileArea(Player.characterID);
 
-        const degree = [0, 1, 2, 3].map(i => -180+(i*90))[Player.facingDirection];
+        const degree = [0, 1, 2, 3].map(i => -180+(i*90))[Player.#facingDirection];
         const rad = degree * Math.PI / 180;
-        const x = ((Math.ceil(((window.innerWidth/2)/TILESIZE))+([Direction.UP, Direction.LEFT].includes(Player.facingDirection)   ? 1 : 0)))*TILESIZE;
-        const y =  (Math.ceil((window.innerHeight/2)/TILESIZE)+([Direction.UP, Direction.RIGHT].includes(Player.facingDirection) ? 1 : 0))*TILESIZE; // Todo: fix this, dirty solution
+        const x = ((Math.ceil(((window.innerWidth/2)/TILESIZE))+([Direction.UP, Direction.LEFT].includes(Player.#facingDirection)   ? 1 : 0)))*TILESIZE;
+        const y =  (Math.ceil((window.innerHeight/2)/TILESIZE)+([Direction.UP, Direction.RIGHT].includes(Player.#facingDirection) ? 1 : 0))*TILESIZE; // Todo: fix this, dirty solution
     
         context.translate(x, y);
         context.rotate(rad);
