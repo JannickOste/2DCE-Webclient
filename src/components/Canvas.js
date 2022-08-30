@@ -1,27 +1,29 @@
 import React, { useRef, useEffect } from 'react'
 
+let i = 0; 
 const Canvas = props => {
   
-  const { draw, spritesheet } = props;
+  const { renderer, spritesheet } = props;
   const canvasRef = useRef(null);
   
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    context.canvas.width = window.innerWidth;
-    context.canvas.height = window.innerHeight;
     let animationFrameId;
-    
     const render = () => {
-      draw(context, spritesheet);
-      animationFrameId = window.requestAnimationFrame(render);
+      if(i++ % 100 === 0)
+      {
+        renderer(context, spritesheet);
+        animationFrameId = window.requestAnimationFrame(render);
+      } else render();
     }
+    
     render()
     
     return () => {
       window.cancelAnimationFrame(animationFrameId);
     }
-  }, [draw])
+  }, [renderer])
   
   return (<canvas ref={canvasRef}/>);
 }

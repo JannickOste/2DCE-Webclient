@@ -14,7 +14,7 @@ export default class Player
     static #running = false;
     static #runMultiplier = 2;
     static #moveDirection = {x: 0, y: 0};
-
+    
     static position = { x: 5, y: 5 }
     static facingDirection = Direction.DOWN;
     
@@ -23,23 +23,24 @@ export default class Player
     static Move(direction, run)
     {
         if(this.Moving) return;
+        Player.facingDirection = direction;
         this.#running = run;
 
         switch(direction)
         {
-            case Direction.UP:    Player.#moveDirection = {x: 0, y: 1}; break;
-            case Direction.DOWN:  Player.#moveDirection = {x: 0, y: -1};  break;
-            case Direction.LEFT:  Player.#moveDirection = {x: 1, y: 0};  break;
-            case Direction.RIGHT: Player.#moveDirection = {x: -1, y: 0}; break;
+            case Direction.UP:    if(Player.position.y > 0) Player.#moveDirection = {x: 0, y: -1}; break;
+            case Direction.DOWN:  if(Player.position.y < Tilemap.currentHeight-2) Player.#moveDirection = {x: 0, y: 1};  break; //Todo: look into why render is -1 additional row.
+            case Direction.RIGHT: if(Player.position.x < Tilemap.currentWidth-1) Player.#moveDirection = {x: 1, y: 0}; break;
+            case Direction.LEFT:  if(Player.position.x > 0) Player.#moveDirection = {x: -1, y: 0};  break;
+
             default: throw new Error("Invalid direction parameter, use the Direction enum for passing in direction values.");
         }
-        
-        Player.facingDirection = direction;
-        if(!Tilemap.TilePassable(Player.position.x+Player.#moveDirection.x, Player.position.y+Player.#moveDirection.y))
-            Player.#moveDirection = {x: 0, y: 0};
-            
-        Player.position.x += -Player.#moveDirection.x;
-        Player.position.y += -Player.#moveDirection.y;
+
+        if((Player.#moveDirection.x !== 0 || Player.#moveDirection.y !== 0) && Tilemap.TilePassable(Player.position, Player.#moveDirection))
+        {
+            Player.position.x += Player.#moveDirection.x;
+            Player.position.y += Player.#moveDirection.y;
+        } else Player.#moveDirection = {x: 0, y: 0}
     }
 
     static Update() 
@@ -47,16 +48,20 @@ export default class Player
         if(Player.Moving)
         {
             // todo: add clamp for speed
-            Tilemap.offset.x += (Player.#moveDirection.x*(Player.#running ? Player.#runMultiplier : 1)); 
-            Tilemap.offset.y += (Player.#moveDirection.y*(Player.#running ? Player.#runMultiplier : 1)); 
+            Tilemap.offset.x += -(Player.#moveDirection.x*(Player.#running ? Player.#runMultiplier : 1)); 
+            Tilemap.offset.y += -(Player.#moveDirection.y*(Player.#running ? Player.#runMultiplier : 1)); 
 
             if(Tilemap.offset.x % TILESIZE === 0 && Tilemap.offset.y % TILESIZE === 0)
+            {
                 Player.#moveDirection = {x: 0, y: 0}
+                Tilemap.TryInvokeTileEvent();
+            }
         } 
     }
 
     static Render(context, spritesheet) 
     {
+        context.restore();
         context.save();
 
         const area = spritesheet.getTileArea(Player.characterID);
