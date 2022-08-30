@@ -2,7 +2,7 @@ import EventEmitter from "events";
 import Player from "./entities/Player";
 import Tilemap from "./entities/Tilemap";
 
-export default class ActionHandler extends EventEmitter
+export default class EventHandler extends EventEmitter
 {
     #actionEventHandlers = (() =>
     {

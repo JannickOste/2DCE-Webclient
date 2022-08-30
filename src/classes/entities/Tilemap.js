@@ -11,7 +11,16 @@ export const Area = (() => {
 export default class Tilemap 
 {
     /** Area to load data for */
-    static currentArea = Area.TEST;
+    static #currentArea = Area.TEST;
+    static get currentArea()
+    {
+        return this.#currentArea;
+    }
+    static set currentArea(value)
+    {
+        Tilemap.#Flush();
+        this.#currentArea = value;
+    }
 
     /** Map tiles */
     static #mapBackground = [];
@@ -47,9 +56,7 @@ export default class Tilemap
     {
         const objectOnTile = this.#mapObjects.find(i => i.x == Player.position.x && i.y == Player.position.y);
         if(objectOnTile && objectOnTile.event && typeof(objectOnTile.event) === "number")
-        {
             GameManager.actionHandler.emit(objectOnTile.event, ... (objectOnTile.args ? objectOnTile.args : []));
-        }
     }
 
 
@@ -59,13 +66,13 @@ export default class Tilemap
         if(!Tilemap.#mapBackground.length || !Tilemap.#mapForeground.length || !Tilemap.#mapObjects.length)
         {
             Tilemap.ResetOffset();
-            const backgroundRequest = await fetch(`/maps/${Tilemap.currentArea}_bg.csv`);
+            const backgroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_bg.csv`);
             Tilemap.#mapBackground = toCsvArray(await backgroundRequest.text());
 
-            const foregroundRequest = await fetch(`/maps/${Tilemap.currentArea}_fg.json`);
+            const foregroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_fg.json`);
             Tilemap.#mapForeground = JSON.parse(await foregroundRequest.text());
 
-            const objectsRequest = await fetch(`/maps/${Tilemap.currentArea}_objects.json`);
+            const objectsRequest = await fetch(`/maps/${Tilemap.#currentArea}_objects.json`);
             Tilemap.#mapObjects = JSON.parse(await objectsRequest.text());
         }
 
@@ -74,6 +81,7 @@ export default class Tilemap
     
     static Render(context, spritesheet)
     {
+        if(!GameManager.running) return;
         // Center on screen, and add current map shift
         const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.x);
         const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.y);
@@ -123,5 +131,12 @@ export default class Tilemap
     static ResetOffset() 
     {
         Tilemap.offset = {x: -((Player.position.x*TILESIZE)), y: -((Player.position.y*TILESIZE))}
+    }
+
+    static #Flush() 
+    {
+        Tilemap.#mapBackground = [];
+        Tilemap.#mapForeground = [];
+        Tilemap.#mapObjects = [];
     }
 }
