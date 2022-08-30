@@ -2,6 +2,7 @@ import InputHandler from "../io/InputHandler";
 
 /**
  * Will implement state based system in the future, testing base, works but isn't efficient.
+ * 
  */
 export default class GUI
 {

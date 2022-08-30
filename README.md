@@ -10,8 +10,7 @@
 <strong>V0.1.3a:</strong> 
 <pre>
     - GUI system base added
-    - GUIDrawer added for context drawing support
-    - UIBox component added added to GUI
+    - UIBox component added added to GUI.
     - UITextbox component added  added to GUI
     - HorzontalMenu components added to GUI 
 </pre>
