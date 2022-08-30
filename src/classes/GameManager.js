@@ -1,16 +1,21 @@
 import Player from "./entities/Player";
 import Tilemap from "./entities/Tilemap";
+import ActionHandler from "./ActionHandler";
 
 export default class GameManager
 {
-    static async Update()
+    static actionHandler = new ActionHandler();
+    static async Load() 
     {
-        for(let updateCallback of [Player.Update, Tilemap.Update])
-            await updateCallback();
-        
+        await Tilemap.Load();
     }
 
-    static Render(context, spritesheet)
+    static async Update()
+    {
+        Player.Update();
+    }
+
+    static #resetCanvas = (context) => 
     {
         // Reset size (fixes resize isues.)
         context.canvas.width = window.innerWidth;
@@ -18,9 +23,11 @@ export default class GameManager
 
         context.clearRect(0, 0, window.innerWidth, window.innerHeight)
         context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    }
 
-        for(let renderCallback of [Tilemap.Render, Player.Render])
+    static Render(context, spritesheet)
+    {
+        for(let renderCallback of [ GameManager.#resetCanvas, Tilemap.Render, Player.Render])
             renderCallback(context, spritesheet);
-
     }
 }

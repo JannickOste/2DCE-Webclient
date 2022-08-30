@@ -6,21 +6,17 @@ import Spritesheet from "./classes/gfx/Spritesheet"
 import GameManager from './classes/GameManager';
 import Canvas from './components/Canvas';
 import InputHandler from './classes/io/InputHandler';
+import { MS_PER_TICK } from './classes/Globals';
 
-(async() => {
-  
-  console.dir(await Spritesheet.parseFromURL("/spritesheet.png"));
-})();
-
-const spritesheet = new Image();
-spritesheet.src = '/spritesheet.png';
-spritesheet.onload = () => {
-  setInterval(GameManager.Update);
-  document.addEventListener("keypress", InputHandler.HandleKeyPress);
-
+(async() => 
+{
+  await GameManager.Load();
   const root = ReactDOM.createRoot(document.getElementById('root'));
-  root.render(<Canvas draw={GameManager.Render} spritesheet={new Spritesheet(spritesheet, 32)}/>);
-}
+  root.render(<Canvas renderer={GameManager.Render} spritesheet={await Spritesheet.parseFromURL("/spritesheet.png")}/>);
+
+  document.addEventListener("keypress", InputHandler.HandleKeyPress);
+  setInterval(GameManager.Update, MS_PER_TICK);
+})();
 
 
 reportWebVitals();

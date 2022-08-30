@@ -1,7 +1,18 @@
 [
     {
-        "x": 1,
-        "y": 2,
-        "id": 899
+        "x": 7,
+        "y": 1,
+        "id": 651,
+        "passable": true,
+        "event": 1,
+        "args": [7, 7]
+    },
+    {
+        "x": 8,
+        "y": 1,
+        "id": 652,
+        "passable": true,
+        "event": 1,
+        "args": [8, 7]
     }
 ]
