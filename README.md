@@ -1,6 +1,6 @@
-<h1>React2D - A 2D canvas engine in react</h1>
+<h1>React2D - A 2D canvas engine</h1>
 <i>
-    As my new year of school start, there will be new subjects, react was one of them and i always wanted to look into the canvas component so this is the result ':) 
+    2D Canvas engine, simple GUI generation, tileset & tilemap loading
 </i>
 
 <h2>Credits: </h2>
