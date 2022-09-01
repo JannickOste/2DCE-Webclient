@@ -1,4 +1,5 @@
 import EventEmitter from "events";
+import { Camera } from "./entities/Camera";
 import Player from "./entities/Player";
 import Tilemap, { Area } from "./entities/Tilemap";
 
@@ -26,7 +27,7 @@ export default class EventHandler extends EventEmitter
         console.log("yeleport")
         Player.position.x = args[0];
         Player.position.y = args[1];
-        Tilemap.ResetOffset();
+        Camera.ResetOffset();
     }
 
     onChangeMap = (... args) => 

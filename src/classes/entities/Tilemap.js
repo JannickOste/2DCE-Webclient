@@ -1,5 +1,6 @@
 import GameManager from "../GameManager";
 import { TILESIZE, toCsvArray } from "../Globals";
+import { Camera } from "./Camera";
 import Player from "./Player";
 
 export const Area = (() => {
@@ -20,12 +21,15 @@ export default class Tilemap
 
     static set currentArea(value)
     {
+        if(!Object.values(Area).includes(value))
+            throw new Error("Invalid area");
+
         Tilemap.#Flush();
         this.#currentArea = value;
 
         // Update tilemap assets
         GameManager.asyncUpdateQueue.push(async() => {
-            Tilemap.ResetOffset();
+            Camera.ResetOffset();
             
             const backgroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_bg.csv`);
             if(backgroundRequest.status == 200) Tilemap.#mapBackground = toCsvArray(await backgroundRequest.text());
@@ -46,10 +50,6 @@ export default class Tilemap
     static #mapBackground = [];
     static #mapForeground = [];
     static #mapObjects = [];
-
-    /** Render options  */
-    static offset = {x: 0, y: 0}
-    static rendered = false;
 
     static get currentHeight() 
     {
@@ -72,26 +72,20 @@ export default class Tilemap
         return objectColission;
     }
 
-    static TryInvokeTileEvent()
+    static TryInvokeTileEvent(position)
     {
-        const objectOnTile = this.#mapObjects.find(i => i.x == Player.position.x && i.y == Player.position.y);
+        const objectOnTile = this.#mapObjects.find(i => i.x == position.x && i.y == position.y);
         if(objectOnTile && objectOnTile.events)
-        {
             for(let event of objectOnTile.events)
-            {
                 GameManager.actionHandler.emit(event.id, ... (event.args ? event.args : []));
-            }
-        }
     }
-
-
     
     static Render(context, spritesheet)
     {
         if(!GameManager.running) return;
         // Center on screen, and add current map shift
-        const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.x);
-        const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Tilemap.offset.y);
+        const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x);
+        const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Camera.offset.y);
 
         const areaBuffer = {}
         for(let [y, set] of Object.entries(Tilemap.#mapBackground))
@@ -133,11 +127,6 @@ export default class Tilemap
                 );
             }
         }
-    }
-
-    static ResetOffset() 
-    {
-        Tilemap.offset = {x: -((Player.position.x*TILESIZE)), y: -((Player.position.y*TILESIZE))}
     }
 
     static #Flush() 

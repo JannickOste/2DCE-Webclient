@@ -12,6 +12,7 @@
     - Async update queue added for asset fetching to update loop.
     - Support for multiple tile trigger events added. 
     - Tilemap editor made (source not added yet, still needs some bug fixing)
+    - Camera class added & Tilemap offset moved to camera.
 </pre>
 
 <strong>V0.1.3a:</strong> 
