@@ -49,7 +49,7 @@ export default class Spritesheet
         const tiles = [this.width/TILESIZE, this.height/TILESIZE];
             
         const row = Math.floor(tileId/tiles[0]);
-        const column = (tileId-(row*tiles[0]))-1;
+        const column = (tileId-(row*tiles[0]));
 
         var sourceX = column*TILESIZE;
         var sourceY = row*TILESIZE;

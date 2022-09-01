@@ -6,9 +6,38 @@ export const InputState = (() => {
         IN_GAME: 1
     }
 })();
+
+export const NativeInputCode = (() => {
+    return {
+        MOVE_UP:     0,
+        MOVE_DOWN:   1,
+        MOVE_LEFT:   2,
+        MOVE_RIGHT:  3,
+
+        ACTION:      4,
+        INGAME_MENU: 5
+    }
+});
+
 export default class InputHandler
 {
     static inputOveride;
+
+
+    static KeyBindings = {
+        z: NativeInputCode.MOVE_UP,
+        s: NativeInputCode.MOVE_DOWN,
+        q: NativeInputCode.MOVE_LEFT,
+        d: NativeInputCode.MOVE_RIGHT,
+        /*
+        w: NativeInputCode.MOVE_UP,
+        a: NativeInputCode.MOVE_LEFT,
+        s: NativeInputCode.MOVE_DOWN,
+        d: NativeInputCode.MOVE_RIGHT,
+        */
+        a: NativeInputCode.ACTION
+    }
+
     static KeyMapping = (() =>{
         return { 
             UP: "z",

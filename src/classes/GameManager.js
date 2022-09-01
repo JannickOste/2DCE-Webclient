@@ -4,21 +4,28 @@ import EventHandler from "./ActionHandler";
 import GUI from "./gfx/GUI";
 import InputHandler from "./io/InputHandler";
 import { StartMenu } from "./gfx/ui/models/StartMenu";
+import { Area } from "./entities/Tilemap";
 
 export default class GameManager
 {
     static actionHandler = new EventHandler();
     static running = false;
+
+    static asyncUpdateQueue = [];
     
     static async Load() 
     {
-        await Tilemap.Load();
         InputHandler.inputOveride = StartMenu.Move;
         GUI.currentRenderer = StartMenu;
+        Tilemap.currentArea = Area.TEST;
     }
 
     static async Update()
     {
+        let asyncCall = null;
+        while((asyncCall = GameManager.asyncUpdateQueue.shift()))
+            await asyncCall();
+
         Player.Update();
         GUI.Update();
     }

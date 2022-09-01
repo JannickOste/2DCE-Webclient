@@ -4,7 +4,8 @@ import Player from "./Player";
 
 export const Area = (() => {
     return {
-        TEST: "test"
+        TEST:        "test",
+        ATTACK_SHOP: "attshop"
     }
 })();
 
@@ -16,10 +17,29 @@ export default class Tilemap
     {
         return this.#currentArea;
     }
+
     static set currentArea(value)
     {
         Tilemap.#Flush();
         this.#currentArea = value;
+
+        // Update tilemap assets
+        GameManager.asyncUpdateQueue.push(async() => {
+            Tilemap.ResetOffset();
+            
+            const backgroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_bg.csv`);
+            if(backgroundRequest.status == 200) Tilemap.#mapBackground = toCsvArray(await backgroundRequest.text());
+            else console.log("No background tiles found for: "+this.#currentArea);
+
+            const foregroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_fg.json`);
+            if(foregroundRequest.status == 200) Tilemap.#mapForeground = JSON.parse(await foregroundRequest.text());
+            else console.log("No foreground tiles found for: "+this.#currentArea);
+            
+            const objectsRequest = await fetch(`/maps/${Tilemap.#currentArea}_objects.json`);
+            console.dir(objectsRequest);
+            if(objectsRequest.status == 200) Tilemap.#mapObjects = JSON.parse(await objectsRequest.text());
+            else console.log("No interactable object tiles found for: "+this.#currentArea);
+        });
     }
 
     /** Map tiles */
@@ -55,28 +75,15 @@ export default class Tilemap
     static TryInvokeTileEvent()
     {
         const objectOnTile = this.#mapObjects.find(i => i.x == Player.position.x && i.y == Player.position.y);
-        if(objectOnTile && objectOnTile.event && typeof(objectOnTile.event) === "number")
-            GameManager.actionHandler.emit(objectOnTile.event, ... (objectOnTile.args ? objectOnTile.args : []));
-    }
-
-
-    static async Load()
-    {
-        
-        if(!Tilemap.#mapBackground.length || !Tilemap.#mapForeground.length || !Tilemap.#mapObjects.length)
+        if(objectOnTile && objectOnTile.events)
         {
-            Tilemap.ResetOffset();
-            const backgroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_bg.csv`);
-            Tilemap.#mapBackground = toCsvArray(await backgroundRequest.text());
-
-            const foregroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_fg.json`);
-            Tilemap.#mapForeground = JSON.parse(await foregroundRequest.text());
-
-            const objectsRequest = await fetch(`/maps/${Tilemap.#currentArea}_objects.json`);
-            Tilemap.#mapObjects = JSON.parse(await objectsRequest.text());
+            for(let event of objectOnTile.events)
+            {
+                GameManager.actionHandler.emit(event.id, ... (event.args ? event.args : []));
+            }
         }
-
     }
+
 
     
     static Render(context, spritesheet)

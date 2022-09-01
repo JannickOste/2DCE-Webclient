@@ -1,18 +1,34 @@
 [
     {
-        "x": 7,
-        "y": 1,
-        "id": 651,
-        "passable": true,
-        "event": 1,
-        "args": [7, 7]
+        "x": 3,
+        "y": 5,
+        "id": 650,
+        "passable": true,        
+        "events": [
+            {
+                "id": 2,
+                "args": [1]
+            },
+            {
+                "id": 1,
+                "args": [5, 4]
+            }
+        ]
     },
     {
-        "x": 8,
-        "y": 1,
-        "id": 652,
-        "passable": true,
-        "event": 1,
-        "args": [8, 7]
+        "x": 4,
+        "y": 5,
+        "id": 651,
+        "passable": true,        
+        "events": [
+            {
+                "id": 2,
+                "args": [1]
+            },
+            {
+                "id": 1,
+                "args": [5, 5]
+            }
+        ]
     }
 ]

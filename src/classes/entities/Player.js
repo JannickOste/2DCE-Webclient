@@ -9,7 +9,7 @@ export const Direction = {
 
 export default class Player 
 {
-    static characterID = 49;
+    static characterID = 810;
 
     static #running = false;
     static #runMultiplier = 2;
