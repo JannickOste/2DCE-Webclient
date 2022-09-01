@@ -1,5 +1,7 @@
 import { TILESIZE } from "../Globals";
+import { Camera } from "./Camera";
 import Tilemap from "./Tilemap";
+
 export const Direction = {
     UP: 0,
     RIGHT: 1,
@@ -9,7 +11,7 @@ export const Direction = {
 
 export default class Player 
 {
-    static characterID = 49;
+    static characterID = 810;
 
     static #running = false;
     static #runMultiplier = 2;
@@ -48,13 +50,13 @@ export default class Player
         if(Player.Moving)
         {
             // todo: add clamp for speed
-            Tilemap.offset.x += -(Player.#moveDirection.x*(Player.#running ? Player.#runMultiplier : 1)); 
-            Tilemap.offset.y += -(Player.#moveDirection.y*(Player.#running ? Player.#runMultiplier : 1)); 
+            Camera.offset.x += -(Player.#moveDirection.x*(Player.#running ? Player.#runMultiplier : 1)); 
+            Camera.offset.y += -(Player.#moveDirection.y*(Player.#running ? Player.#runMultiplier : 1)); 
 
-            if(Tilemap.offset.x % TILESIZE === 0 && Tilemap.offset.y % TILESIZE === 0)
+            if(Camera.offset.x % TILESIZE === 0 && Camera.offset.y % TILESIZE === 0)
             {
                 Player.#moveDirection = {x: 0, y: 0}
-                Tilemap.TryInvokeTileEvent();
+                Tilemap.TryInvokeTileEvent(Player.position);
             }
         } 
     }

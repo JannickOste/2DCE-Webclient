@@ -7,13 +7,20 @@
 - Spritesheet: <a href="https://pipoya.itch.io/pipoya-rpg-tileset-32x32">pipoya-rpg-tileset-32x32</a>
 
 <h3>Update Log:</h3> 
+<strong>V0.1.4a:</strong> 
+<pre>
+    - Async update queue added for asset fetching to update loop.
+    - Support for multiple tile trigger events added. 
+    - Tilemap editor made (source not added yet, still needs some bug fixing)
+    - Camera class added & Tilemap offset moved to camera.
+</pre>
+
 <strong>V0.1.3a:</strong> 
 <pre>
     - GUI system base added
-    - GUIDrawer added for context drawing support
-    - UIBox component added added to GUI
-    - UITextbox component added  added to GUI
-    - HorzontalMenu components added to GUI 
+    - UIBox component added to GUI.
+    - UITextbox component  added to GUI
+    - UIHorzontalMenu component added to GUI 
 </pre>
 
 <strong>V0.1.2a:</strong> 

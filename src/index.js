@@ -12,6 +12,7 @@ import { MS_PER_TICK } from './classes/Globals';
 {
   window.addEventListener("beforeunload", GameManager.Exit);
   await GameManager.Load();
+  
   const root = ReactDOM.createRoot(document.getElementById('root'));
   root.render(<Canvas renderer={GameManager.Render} spritesheet={await Spritesheet.parseFromURL("/spritesheet.png")}/>);
 
