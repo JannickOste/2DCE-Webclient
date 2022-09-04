@@ -13,8 +13,10 @@
     - Support for multiple tile trigger events added. 
     - Tilemap editor made (source not added yet, still needs some bug fixing)
     - Camera class added & Tilemap offset moved to camera.
+    - min/max width & height added to UI components
+    - Basic client structure added (server will be released in seperate repository).
 </pre>
-
+za
 <strong>V0.1.3a:</strong> 
 <pre>
     - GUI system base added

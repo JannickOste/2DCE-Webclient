@@ -2,7 +2,7 @@ import { FontAlign } from "./gfx/ui/FontAlign";
 
 export const TICK_RATE_S = 60;
 export const MS_PER_TICK = 1000/TICK_RATE_S;
-export const TILESIZE = 32;
+export const TILESIZE = 16;
 
 // GUI
 export const DEFAULT_FONT = "16px Arial";
@@ -18,4 +18,6 @@ export const DEFAULT_GUI_PROPS = {
     bgColor: DEFAULT_BG_COLOR, borderColor: DEFAULT_BORDER_COLOR, 
     font: DEFAULT_FONT
 }
+
+export const isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
 export const toCsvArray = (input) => input.split("\n").map(s => s.split(";"));

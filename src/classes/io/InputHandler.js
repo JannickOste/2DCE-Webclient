@@ -1,11 +1,5 @@
-import Player, { Direction } from "../entities/Player";
+import Player, { Direction } from "../entities/characters/Player";
 
-export const InputState = (() => {
-    return {
-        GUI: 0,
-        IN_GAME: 1
-    }
-})();
 
 export const NativeInputCode = (() => {
     return {
@@ -70,8 +64,4 @@ export default class InputHandler
             InputHandler.inputOveride(direction[0]);
         }
     }
-
-
-
 }
-

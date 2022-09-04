@@ -1,10 +1,10 @@
-import Player from "./entities/Player";
+import Player from "./entities/characters/Player";
 import Tilemap from "./entities/Tilemap";
 import EventHandler from "./ActionHandler";
 import GUI from "./gfx/GUI";
 import InputHandler from "./io/InputHandler";
 import { StartMenu } from "./gfx/ui/models/StartMenu";
-import { Area } from "./entities/Tilemap";
+import { Client } from "./net/Client";
 
 export default class GameManager
 {
@@ -17,7 +17,6 @@ export default class GameManager
     {
         InputHandler.inputOveride = StartMenu.Move;
         GUI.currentRenderer = StartMenu;
-        Tilemap.currentArea = Area.TEST;
     }
 
     static async Update()

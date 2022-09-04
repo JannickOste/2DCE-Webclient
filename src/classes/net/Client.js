@@ -1,26 +1,44 @@
-import ServerPacketHandler from "./ServerPacketHandler";
+import ClientPacket from "./ClientPacket";
+import PacketHandler from "./PacketHandler";
 
 export class Client
 {
     static #id;
     static #socket;
+    static #packetHandler = new PacketHandler();
+
+    static get Connected() { return Client.#socket && Client.#socket.OPEN}
 
     /**
      * Connect to game server.
      * 
      * @returns void
      */
-    static Connect()
+    static async Connect(username, password)
     {
-        super();
+        return new Promise((resolve, reject) => {
+            try
+            {
+                Client.#socket = new WebSocket('ws://localhost:8080/ws')
 
-        const WebSocket = require("ws");
-        Client.#socket = new WebSocket('ws://localhost:8080/ws')
+                // Set client socket events.
+                Client.#socket.onopen    = ()     => {
+                    console.log("Connection to server established, sending credentials...");
+                    this.sendPacket(ClientPacket.AUTHENTICATE, {
+                        username: username,//"hello",
+                        password: password//"hello world"
+                    });
+    
+                    resolve();
+                }; 
 
-        // Set client socket events.
-        Client.#socket.onopen    = ()     => Client.#onClientConnect();
-        Client.#socket.onmessage = packet => Client.#handlePacket(packet.data);
-        Client.#socket.onerror   = error  => Client.#onSocketException(error);
+                Client.#socket.onmessage = packet => Client.#handlePacket(packet.data); // todo: add crypt layer
+                Client.#socket.onerror   = error  => Client.#onSocketException(error);
+            } catch(e)
+            {
+                reject(e);
+            }
+        });
     }
 
     /**
@@ -46,16 +64,16 @@ export class Client
                 
             if(!(data instanceof Object))
                 throw new Error("Invalid packet datatype");
-            
+                
             if(data.id !== undefined)
             {
                 try
                 {
-                    ServerPacketHandler.parsePacket(data.id, data.args);
+                    this.#packetHandler.parsePacket(data.id, data.args);
                 }
                 catch(e)
                 {
-                    this.#onSocketException(err);
+                    this.#onSocketException(e);
                 }
             }
 
@@ -67,16 +85,6 @@ export class Client
     }
 
     /**
-     * On server connection established.
-     * 
-     * @returns void
-     */
-    static #onClientConnect()
-    {
-        console.log("Connection to server established...");
-    }
-    
-    /**
      * On socket exception
      * @param {*} err 
      * 
@@ -85,7 +93,6 @@ export class Client
     static #onSocketException(err)
     {
         // Packet or socket exception handling (kick client, resend to auth screen)
-        console.log(err);
 
         this.#socket.close();
     }
@@ -93,5 +100,11 @@ export class Client
     static sendPacket(clientPacket, data)
     {
         // Parse packet data, encrypt & send through socket.
+
+        this.#socket.send(JSON.stringify({
+            id: clientPacket,
+            args: data
+        }));
     }
+
 }
