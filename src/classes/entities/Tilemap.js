@@ -3,20 +3,18 @@ import { TILESIZE, toCsvArray } from "../Globals";
 import { Client } from "../net/Client";
 import ClientPacket from "../net/ClientPacket";
 import { Camera } from "./Camera";
-import Player from "./characters/Player";
 
 export const Area = (() => {
     return {
-        LITTLEROOT: 0,
-        TEST:        "test",
-        ATTACK_SHOP: "attshop"
+        LITTLEROOT: 0
     }
 })();
 
 export default class Tilemap 
 {
     /** Area to load data for */
-    static #currentArea = Area.TEST;
+    static #currentArea = Area.LITTLEROOT;
+
     static get currentArea()
     {
         return this.#currentArea;
@@ -30,7 +28,7 @@ export default class Tilemap
         Tilemap.#Flush();
         this.#currentArea = value;
 
-        Client.sendPacket(ClientPacket.REQUEST_MAP, {mapid: Area.LITTLEROOT});
+        Client.sendPacket(ClientPacket.REQUEST_MAP, {mapid: value});
 
     }
 
@@ -38,9 +36,8 @@ export default class Tilemap
     {
         this.#mapBackground = toCsvArray(background);
         this.#mapForeground = foreground;
-
-        console.log(this.#mapForeground)
     }
+
     /** Map tiles */
     static #mapBackground = [];
     static #mapForeground = [];
@@ -64,6 +61,7 @@ export default class Tilemap
 
         const objectColission = (fgObject ? fgObject.passable !== undefined && fgObject.passable : true);
         */
+
         return true;
     }
 
@@ -82,7 +80,7 @@ export default class Tilemap
         if(Tilemap.#mapBackground.length == 0 || !Client.Connected) return;
 
         // Center on screen, and add current map shift
-        const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x);
+        const xOffset =  (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x);
         const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Camera.offset.y);
 
         const areaBuffer = {}

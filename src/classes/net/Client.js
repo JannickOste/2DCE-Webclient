@@ -6,6 +6,7 @@ export class Client
     static #id;
     static #socket;
     static #packetHandler = new PacketHandler();
+    static localId = -1;
 
     static get Connected() { return Client.#socket && Client.#socket.OPEN}
 

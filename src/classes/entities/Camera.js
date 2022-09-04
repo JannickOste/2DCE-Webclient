@@ -8,11 +8,12 @@ export class Camera
         y: 0
     }
 
-    static ResetOffset() 
+    static SetToPosition(position) 
     {
-        Camera.offset = {
-            x: -((Player.position.x*TILESIZE)),
-            y: -((Player.position.y*TILESIZE))
-        }
+        if(Player.Local !== undefined)
+            Camera.offset = {
+                x: -((position.x*TILESIZE)),
+                y: -((position.y*TILESIZE))
+            }
     }
 }

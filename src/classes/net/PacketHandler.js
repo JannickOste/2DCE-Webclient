@@ -1,4 +1,6 @@
+import Player from "../entities/characters/Player";
 import Tilemap from "../entities/Tilemap";
+import { Client } from "./Client";
 import ServerPacket from "./ServerPacket";
 
 export default class PacketHandler
@@ -13,7 +15,7 @@ export default class PacketHandler
         [ServerPacket.MAP_RESPONSE, (args) => {
             Tilemap.setData(args.bg, args.fg)
         }],
-        [ServerPacket.SET_PLAYER, (args)   => console.log(`SPAWN PLAYER, args: ${args}`)],
+        [ServerPacket.SET_PLAYER, (args)   => Player.SetPosition(args.pid, args.x, args.y)],
     ]);
 
     parsePacket(serverPacketId, data)
@@ -31,6 +33,7 @@ export default class PacketHandler
 
     serverHello(packet)
     {
+        Client.localId = packet.pid;
         // Set client id / set server public / send client public 
     }
 }
