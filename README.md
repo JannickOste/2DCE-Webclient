@@ -4,7 +4,7 @@
 </i>
 
 <h2>Other project assets:</h2>
-- <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server (TS)</a>
+- <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server (TS)</a><br />
 - <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator (C#)</a>
 
 
