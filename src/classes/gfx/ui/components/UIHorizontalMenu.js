@@ -8,7 +8,8 @@ export default class UIHorizontalMenu
     static Render(context, x, y, width, height, options, {
         fontAlign = FontAlign.UNSET, xTextOffset = 0, yTextOffset = 0, 
         textColor = DEFAULT_TEXT_COLOR, textActiveColor=DEFAULT_TEXT_ACTIVE_COLOR, bgColor=DEFAULT_BG_COLOR, bgActiveColor = DEFAULT_BG_ACTIVE_COLOR,
-        borderColor = DEFAULT_BORDER_COLOR, font=DEFAULT_FONT, selectedIndex = 0
+        borderColor = DEFAULT_BORDER_COLOR, font=DEFAULT_FONT, selectedIndex = 0, 
+        minWidth = 0, minHeight = 0, maxWidth = window.innerWidth, maxHeight = window.innerHeight
        } = {}) 
     {
         const keys = Object.keys(options);
@@ -24,7 +25,11 @@ export default class UIHorizontalMenu
                 textColor: (index == selectedIndex ? textActiveColor : textColor),
                 font: font,
                 xTextOffset: xTextOffset,
-                yTextOffset:yTextOffset
+                yTextOffset:yTextOffset,
+                minHeight: minHeight,
+                maxHeight: maxHeight,
+                minWidth: minWidth,
+                maxWidth: maxWidth
             });
         }
     }

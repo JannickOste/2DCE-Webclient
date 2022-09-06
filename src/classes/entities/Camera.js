@@ -1,5 +1,5 @@
 import { TILESIZE } from "../Globals"
-import Player from "./Player"
+import Player from "./characters/Player"
 
 export class Camera
 {
@@ -8,11 +8,12 @@ export class Camera
         y: 0
     }
 
-    static ResetOffset() 
+    static SetToPosition(position) 
     {
-        Camera.offset = {
-            x: -((Player.position.x*TILESIZE)),
-            y: -((Player.position.y*TILESIZE))
-        }
+        if(Player.Local !== undefined)
+            Camera.offset = {
+                x: -((position.x)),
+                y: -((position.y))
+            }
     }
 }

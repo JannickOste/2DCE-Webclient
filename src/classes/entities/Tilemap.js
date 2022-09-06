@@ -1,19 +1,20 @@
 import GameManager from "../GameManager";
 import { TILESIZE, toCsvArray } from "../Globals";
+import { Client } from "../net/Client";
+import ClientPacket from "../net/ClientPacket";
 import { Camera } from "./Camera";
-import Player from "./Player";
 
 export const Area = (() => {
     return {
-        TEST:        "test",
-        ATTACK_SHOP: "attshop"
+        LITTLEROOT: 0
     }
 })();
 
 export default class Tilemap 
 {
     /** Area to load data for */
-    static #currentArea = Area.TEST;
+    static #currentArea = Area.LITTLEROOT;
+
     static get currentArea()
     {
         return this.#currentArea;
@@ -27,64 +28,59 @@ export default class Tilemap
         Tilemap.#Flush();
         this.#currentArea = value;
 
-        // Update tilemap assets
-        GameManager.asyncUpdateQueue.push(async() => {
-            Camera.ResetOffset();
-            
-            const backgroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_bg.csv`);
-            if(backgroundRequest.status == 200) Tilemap.#mapBackground = toCsvArray(await backgroundRequest.text());
-            else console.log("No background tiles found for: "+this.#currentArea);
+        Client.sendPacket(ClientPacket.REQUEST_MAP, {mapid: value});
 
-            const foregroundRequest = await fetch(`/maps/${Tilemap.#currentArea}_fg.json`);
-            if(foregroundRequest.status == 200) Tilemap.#mapForeground = JSON.parse(await foregroundRequest.text());
-            else console.log("No foreground tiles found for: "+this.#currentArea);
-            
-            const objectsRequest = await fetch(`/maps/${Tilemap.#currentArea}_objects.json`);
-            console.dir(objectsRequest);
-            if(objectsRequest.status == 200) Tilemap.#mapObjects = JSON.parse(await objectsRequest.text());
-            else console.log("No interactable object tiles found for: "+this.#currentArea);
-        });
+    }
+
+    static setData(background, foreground)
+    {
+        this.#mapBackground = toCsvArray(background);
+        this.#mapForeground = foreground;
     }
 
     /** Map tiles */
     static #mapBackground = [];
     static #mapForeground = [];
-    static #mapObjects = [];
 
-    static get currentHeight() 
+    static get Rows() 
     {
         return Tilemap.#mapBackground.length;
     }
 
-    static get currentWidth() 
+    static get Columns() 
     {
         return Tilemap.#mapBackground[0].length;
     }
 
     static TilePassable(position, offset) 
     {
+        /*
         const x = position.x+offset.x;
         const y = position.y+offset.y;
-        const mapObject = this.#mapObjects.find(i => i.x == x && i.y == y);
         const fgObject = this.#mapForeground.find(i => i.x == x && i.y == y);
 
-        const objectColission = (mapObject ? mapObject.passable !== undefined && mapObject.passable : true) && (fgObject ? fgObject.passable !== undefined && fgObject.passable : true);
-        return objectColission;
+        const objectColission = (fgObject ? fgObject.passable !== undefined && fgObject.passable : true);
+        */
+
+        return true;
     }
 
     static TryInvokeTileEvent(position)
     {
+        /*
         const objectOnTile = this.#mapObjects.find(i => i.x == position.x && i.y == position.y);
         if(objectOnTile && objectOnTile.events)
             for(let event of objectOnTile.events)
                 GameManager.actionHandler.emit(event.id, ... (event.args ? event.args : []));
+        */
     }
     
     static Render(context, spritesheet)
     {
-        if(!GameManager.running) return;
+        if(Tilemap.#mapBackground.length == 0 || !Client.Connected) return;
+
         // Center on screen, and add current map shift
-        const xOffset = (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x);
+        const xOffset =  (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x);
         const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Camera.offset.y);
 
         const areaBuffer = {}
@@ -109,7 +105,7 @@ export default class Tilemap
             }
         }
 
-        for(let set of [Tilemap.#mapForeground, Tilemap.#mapObjects])
+        for(let set of [Tilemap.#mapForeground])
         {
             for(let obj of set)
             {
@@ -133,6 +129,5 @@ export default class Tilemap
     {
         Tilemap.#mapBackground = [];
         Tilemap.#mapForeground = [];
-        Tilemap.#mapObjects = [];
     }
 }

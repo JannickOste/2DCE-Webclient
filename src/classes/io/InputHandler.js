@@ -1,11 +1,5 @@
-import Player, { Direction } from "../entities/Player";
+import { SendInput } from "../net/packets/client/SendInput";
 
-export const InputState = (() => {
-    return {
-        GUI: 0,
-        IN_GAME: 1
-    }
-})();
 
 export const NativeInputCode = (() => {
     return {
@@ -57,10 +51,10 @@ export default class InputHandler
         {
             switch(ev.key.toLowerCase())
             {
-                case InputHandler.KeyMapping.UP:    Player.Move(Direction.UP,    shiftClick);  break;
-                case InputHandler.KeyMapping.DOWN:  Player.Move(Direction.DOWN,  shiftClick);  break;
-                case InputHandler.KeyMapping.LEFT:  Player.Move(Direction.LEFT,  shiftClick);  break;
-                case InputHandler.KeyMapping.RIGHT: Player.Move(Direction.RIGHT, shiftClick);  break;
+                case InputHandler.KeyMapping.UP:    SendInput(0, -1, shiftClick); break;// OldPlayer.Move(Direction.UP,    shiftClick);  break;
+                case InputHandler.KeyMapping.DOWN:  SendInput(0,  1, shiftClick);  break;
+                case InputHandler.KeyMapping.LEFT:  SendInput(-1, 0, shiftClick); break;
+                case InputHandler.KeyMapping.RIGHT: SendInput(1,  0, shiftClick);  break;
                 default: return;
             }
         }
@@ -70,8 +64,4 @@ export default class InputHandler
             InputHandler.inputOveride(direction[0]);
         }
     }
-
-
-
 }
-

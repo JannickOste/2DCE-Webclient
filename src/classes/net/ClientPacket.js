@@ -1,7 +1,8 @@
 const ClientPacket = (() => {
     return {
-        CLIENT_HELLO: 0,
-        REQUEST_MAP:  1
+        AUTHENTICATE: 0,
+        SEND_INPUT:   1,
+        REQUEST_MAP:  2
     }
 })();
 

@@ -11,11 +11,8 @@ const Canvas = props => {
     const context = canvas.getContext('2d');
     let animationFrameId;
     const render = () => {
-      if(i++ % 100 === 0)
-      {
-        renderer(context, spritesheet);
-        animationFrameId = window.requestAnimationFrame(render);
-      } else render();
+      renderer(context, spritesheet);
+      animationFrameId = window.requestAnimationFrame(render);
     }
     
     render()

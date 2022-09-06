@@ -1,32 +1,23 @@
-import Player from "./entities/Player";
 import Tilemap from "./entities/Tilemap";
-import EventHandler from "./ActionHandler";
 import GUI from "./gfx/GUI";
 import InputHandler from "./io/InputHandler";
 import { StartMenu } from "./gfx/ui/models/StartMenu";
-import { Area } from "./entities/Tilemap";
+import Player from "./entities/characters/Player";
 
 export default class GameManager
 {
-    static actionHandler = new EventHandler();
     static running = false;
 
-    static asyncUpdateQueue = [];
-    
     static async Load() 
     {
         InputHandler.inputOveride = StartMenu.Move;
         GUI.currentRenderer = StartMenu;
-        Tilemap.currentArea = Area.TEST;
     }
 
     static async Update()
     {
-        let asyncCall = null;
-        while((asyncCall = GameManager.asyncUpdateQueue.shift()))
-            await asyncCall();
-
-        Player.Update();
+        if(Player.Local)
+            Player.Local.Update();
         GUI.Update();
     }
 
@@ -42,8 +33,11 @@ export default class GameManager
 
     static Render(context, spritesheet)
     {
-        for(let renderCallback of [ GameManager.#resetCanvas, Tilemap.Render, Player.Render, GUI.Render])
+        for(let renderCallback of [ GameManager.#resetCanvas, Tilemap.Render, GUI.Render])
             renderCallback(context, spritesheet);
+        
+        for(let entity of Object.values(Player.Players))
+            entity.Render(context, spritesheet)
     }
 
     static Exit()
