@@ -8,10 +8,10 @@
 - <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator (C#)</a>
 
 
-<h3>Credits: </h3>
+<h2>Credits: </h2>
 - Spritesheet: <a href="https://pipoya.itch.io/pipoya-rpg-tileset-32x32">pipoya-rpg-tileset-32x32</a>
 
-<h4>Update Log:</h4> 
+<h2>Update Log:</h2> 
 <strong>V0.1.5a:</strong> 
 <pre>
     - Async update queue removed
