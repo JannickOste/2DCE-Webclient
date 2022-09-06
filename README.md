@@ -1,16 +1,17 @@
 <h1>React2D - A 2D canvas engine</h1>
 <i>
     2D Canvas engine, simple GUI generation, tileset & tilemap loading<br />
-    
-    - <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server (TS)</a>
-    - <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator (C#)</a>
 </i>
 
+<h2>Other project assets:</h2>
+- <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server (TS)</a>
+- <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator (C#)</a>
 
-<h2>Credits: </h2>
+
+<h3>Credits: </h3>
 - Spritesheet: <a href="https://pipoya.itch.io/pipoya-rpg-tileset-32x32">pipoya-rpg-tileset-32x32</a>
 
-<h3>Update Log:</h3> 
+<h4>Update Log:</h4> 
 <strong>V0.1.5a:</strong> 
 <pre>
     - Async update queue removed
