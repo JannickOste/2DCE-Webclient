@@ -38,8 +38,8 @@ export default class Player
         const degree = [0, 1, 2, 3].map(i => -180+(i*90))[this.#facingDirection];
         const rad = degree * Math.PI / 180;
 
-        const x =  (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x)+(this.position.x*TILESIZE)
-        const y =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Camera.offset.y)+(this.position.y*TILESIZE)
+        const x =  (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x)+(this.position.x)
+        const y =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Camera.offset.y)+(this.position.y)
 
         context.drawImage(spritesheet.imageElement, area.x, area.y, TILESIZE, TILESIZE, x, y, TILESIZE, TILESIZE);
         

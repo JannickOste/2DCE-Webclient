@@ -51,10 +51,10 @@ export default class InputHandler
         {
             switch(ev.key.toLowerCase())
             {
-                case InputHandler.KeyMapping.UP:    SendInput(0, -1); break;// OldPlayer.Move(Direction.UP,    shiftClick);  break;
-                case InputHandler.KeyMapping.DOWN:  SendInput(0, 1);  break;
-                case InputHandler.KeyMapping.LEFT:  SendInput(-1, 0); break;
-                case InputHandler.KeyMapping.RIGHT: SendInput(1, 0);  break;
+                case InputHandler.KeyMapping.UP:    SendInput(0, -1, shiftClick); break;// OldPlayer.Move(Direction.UP,    shiftClick);  break;
+                case InputHandler.KeyMapping.DOWN:  SendInput(0,  1, shiftClick);  break;
+                case InputHandler.KeyMapping.LEFT:  SendInput(-1, 0, shiftClick); break;
+                case InputHandler.KeyMapping.RIGHT: SendInput(1,  0, shiftClick);  break;
                 default: return;
             }
         }

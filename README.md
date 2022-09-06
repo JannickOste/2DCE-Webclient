@@ -7,6 +7,14 @@
 - Spritesheet: <a href="https://pipoya.itch.io/pipoya-rpg-tileset-32x32">pipoya-rpg-tileset-32x32</a>
 
 <h3>Update Log:</h3> 
+<strong>V0.1.5a:</strong> 
+<pre>
+    - Async update queue removed
+    - Local mapdata removed now loaded from websocket server
+    - Local colission checking removed and moved to websocket server
+    - Player storing added to server
+    - Update loop changed from 30 -> 60FPS sec
+</pre>
 <strong>V0.1.4a:</strong> 
 <pre>
     - Async update queue added for asset fetching to update loop.

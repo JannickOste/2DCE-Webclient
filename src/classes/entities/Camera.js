@@ -12,8 +12,8 @@ export class Camera
     {
         if(Player.Local !== undefined)
             Camera.offset = {
-                x: -((position.x*TILESIZE)),
-                y: -((position.y*TILESIZE))
+                x: -((position.x)),
+                y: -((position.y))
             }
     }
 }
