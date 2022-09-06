@@ -2,8 +2,8 @@
 <i>
     2D Canvas engine, simple GUI generation, tileset & tilemap loading<br />
     
-    - <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server</a>
-    - <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator</a>
+    - <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server (TS)</a>
+    - <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator (C#)</a>
 </i>
 
 
