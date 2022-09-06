@@ -1,7 +1,11 @@
 <h1>React2D - A 2D canvas engine</h1>
 <i>
-    2D Canvas engine, simple GUI generation, tileset & tilemap loading
+    2D Canvas engine, simple GUI generation, tileset & tilemap loading<br />
+    
+    - <a href="https://github.com/JannickOste/2d-canvas-engine-server">Websocket server</a>
+    - <a href="https://github.com/JannickOste/react2d-tilemap-editor">Tilemap editor / generator</a>
 </i>
+
 
 <h2>Credits: </h2>
 - Spritesheet: <a href="https://pipoya.itch.io/pipoya-rpg-tileset-32x32">pipoya-rpg-tileset-32x32</a>
