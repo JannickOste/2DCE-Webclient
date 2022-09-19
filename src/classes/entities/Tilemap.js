@@ -1,5 +1,5 @@
 import GameManager from "../GameManager";
-import { TILESIZE, toCsvArray } from "../Globals";
+import { SCALED_TILESIZE, TILESIZE, toCsvArray } from "../Globals";
 import { Client } from "../net/Client";
 import ClientPacket from "../net/ClientPacket";
 import { Camera } from "./Camera";
@@ -12,30 +12,12 @@ export const Area = (() => {
 
 export default class Tilemap 
 {
-    /** Area to load data for */
-    static #currentArea = Area.LITTLEROOT;
-
-    static get currentArea()
-    {
-        return this.#currentArea;
-    }
-
-    static set currentArea(value)
-    {
-        if(!Object.values(Area).includes(value))
-            throw new Error("Invalid area");
-
-        Tilemap.#Flush();
-        this.#currentArea = value;
-
-        Client.sendPacket(ClientPacket.REQUEST_MAP, {mapid: value});
-
-    }
 
     static setData(background, foreground)
     {
         this.#mapBackground = toCsvArray(background);
         this.#mapForeground = foreground;
+
     }
 
     /** Map tiles */
@@ -52,36 +34,14 @@ export default class Tilemap
         return Tilemap.#mapBackground[0].length;
     }
 
-    static TilePassable(position, offset) 
-    {
-        /*
-        const x = position.x+offset.x;
-        const y = position.y+offset.y;
-        const fgObject = this.#mapForeground.find(i => i.x == x && i.y == y);
 
-        const objectColission = (fgObject ? fgObject.passable !== undefined && fgObject.passable : true);
-        */
-
-        return true;
-    }
-
-    static TryInvokeTileEvent(position)
-    {
-        /*
-        const objectOnTile = this.#mapObjects.find(i => i.x == position.x && i.y == position.y);
-        if(objectOnTile && objectOnTile.events)
-            for(let event of objectOnTile.events)
-                GameManager.actionHandler.emit(event.id, ... (event.args ? event.args : []));
-        */
-    }
-    
     static Render(context, spritesheet)
     {
         if(Tilemap.#mapBackground.length == 0 || !Client.Connected) return;
 
         // Center on screen, and add current map shift
-        const xOffset =  (Math.ceil(((window.innerWidth/2)/TILESIZE))*TILESIZE)+(Camera.offset.x);
-        const yOffset =  (Math.ceil(((window.innerHeight/2)/TILESIZE))*TILESIZE)+(Camera.offset.y);
+        const xOffset =  (Math.ceil(((window.innerWidth/2)/SCALED_TILESIZE))*SCALED_TILESIZE)+(Camera.offset.x);
+        const yOffset =  (Math.ceil(((window.innerHeight/2)/SCALED_TILESIZE))*SCALED_TILESIZE)+(Camera.offset.y);
 
         const areaBuffer = {}
         for(let [y, set] of Object.entries(Tilemap.#mapBackground))
@@ -98,14 +58,15 @@ export default class Tilemap
                     spritesheet.imageElement, 
                     
                     area.x, area.y, TILESIZE, TILESIZE, 
-                    xOffset+(x*TILESIZE), 
-                    yOffset+(y*TILESIZE), 
-                    TILESIZE, TILESIZE
+                    
+                    xOffset+(x*SCALED_TILESIZE), 
+                    yOffset+(y*SCALED_TILESIZE), 
+                    SCALED_TILESIZE, SCALED_TILESIZE
                 );
             }
         }
 
-        for(let set of [Tilemap.#mapForeground])
+        for(let set of Tilemap.#mapForeground)
         {
             for(let obj of set)
             {
@@ -117,9 +78,10 @@ export default class Tilemap
                     spritesheet.imageElement, 
                     
                     area.x, area.y, TILESIZE, TILESIZE, 
-                    xOffset+(obj.x*TILESIZE), 
-                    yOffset+(obj.y*TILESIZE), 
-                    TILESIZE, TILESIZE
+
+                    xOffset+(obj.x*SCALED_TILESIZE), 
+                    yOffset+(obj.y*SCALED_TILESIZE), 
+                    SCALED_TILESIZE, SCALED_TILESIZE
                 );
             }
         }

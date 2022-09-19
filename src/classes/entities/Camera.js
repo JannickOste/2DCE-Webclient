@@ -1,4 +1,3 @@
-import { TILESIZE } from "../Globals"
 import Player from "./characters/Player"
 
 export class Camera

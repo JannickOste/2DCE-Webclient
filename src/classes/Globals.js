@@ -3,6 +3,8 @@ import { FontAlign } from "./gfx/ui/FontAlign";
 export const TICK_RATE_S = 60;
 export const MS_PER_TICK = 1000/TICK_RATE_S;
 export const TILESIZE = 16;
+export const SCALE_SIZE = 2;
+export const SCALED_TILESIZE = TILESIZE*SCALE_SIZE;
 
 // GUI
 export const DEFAULT_FONT = "16px Arial";

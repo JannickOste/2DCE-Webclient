@@ -18,6 +18,7 @@ export default class GameManager
     {
         if(Player.Local)
             Player.Local.Update();
+            
         GUI.Update();
     }
 
@@ -33,9 +34,10 @@ export default class GameManager
 
     static Render(context, spritesheet)
     {
-        for(let renderCallback of [ GameManager.#resetCanvas, Tilemap.Render, GUI.Render])
+        for(let renderCallback of [ GameManager.#resetCanvas, Tilemap.Render, ])
             renderCallback(context, spritesheet);
-        
+
+        GUI.Render(context, spritesheet);
         for(let entity of Object.values(Player.Players))
             entity.Render(context, spritesheet)
     }
