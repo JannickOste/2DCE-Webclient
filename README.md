@@ -1,6 +1,6 @@
 <h1>2DCE - A 2D canvas engine</h1>
 <i>
-    2D Canvas engine, simple GUI generation, tileset & tilemap loading
+    2D Canvas engine with a custom editor
 </i>
 
 <h2>Credits: </h2>
